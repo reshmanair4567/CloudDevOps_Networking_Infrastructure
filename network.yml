@@ -1,0 +1,98 @@
+Description: >
+Reshma Nair
+This template deploys a VPC, with a pair of publc and private subnets across two Availablity Zones. 
+It deploys an Internet Gateway , with route on public subnets. 
+It deploys a pair of NAT Gateways( one  ) and default routes for them in private subnets.
+
+Parameters:
+  
+  EnvironmentName:
+      Description: An environment name will be prefixed to resources
+      Type: String
+
+  VpcCIDR:
+      Description: Please enter the IP range ( CIDR notation) for this 
+      Type: String
+      Default: 10.0.0.0/16
+      Tags:
+            - Key: name
+              Value: !Ref EnvironmentName
+  
+  InternetGateway:
+      Type: AWS::EC2::InternetGateway
+      Properties: 
+        Tags:
+            - Key: name
+              Value: !Ref EnvironmentName
+
+InternetGatewayAttachment:
+      Type: AWS::EC2::VPCGatewayAttachment
+      Properties: 
+        InternetGatewayId: !Ref InternetGateway
+        VpcId: !Ref VPC
+        
+  PublicSubnet1:
+      Type: AWS::EC2::Subnet
+      Properties: 
+        AssignIpv6AddressOnCreation: Boolean
+        AvailabilityZone: []
+        CidrBlock: String
+        Ipv6CidrBlock: String
+        MapPublicIpOnLaunch: Boolean
+        Tags: 
+          - Tag
+        VpcId: !Ref VPC  
+
+  PrivateSubnet1
+  Type: AWS::EC2::Subnet
+  Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 0, !GetAZ's '' ]
+      CirderBlock: !Ref PrivateSubnet1CIDR
+      MapPublicIpOnLaunch: false
+      Tags: 
+          -   Key: Name
+              Value: !Sub ${EnvironmentName} Private Subnet (AZ1)
+
+    PrivateSubnet1
+  Type: AWS::EC2::Subnet
+  Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 0, !GetAZ's '' ]
+      CirderBlock: !Ref PrivateSubnet1CIDR
+      MapPublicIpOnLaunch: false
+      Tags: 
+          -   Key: Name
+              Value: !Sub ${EnvironmentName} Private Subnet (AZ1)
+
+    PrivateSubnet2
+        Type: AWS::EC2::Subnet
+        Properties:
+            VpcId: !Ref VPC
+            AvailabilityZone: !Select [ 1, !GetAZ's '' ]
+            CirderBlock: !Ref PrivateSubnet1CIDR
+            MapPublicIpOnLaunch: false
+            Tags: 
+                -   Key: Name
+                    Value: !Sub ${EnvironmentName} Private Subnet (AZ2)
+      PublicSubnet1
+          Type: AWS::EC2::Subnet
+          Properties:
+              VpcId: !Ref VPC
+              AvailabilityZone: !Select [ 0, !GetAZ's '' ]
+              CirderBlock: !Ref PrivateSubnet1CIDR
+              MapPublicIpOnLaunch: false
+              Tags: 
+                  -   Key: Name
+                      Value: !Sub ${EnvironmentName} Private Subnet (AZ1)
+
+  PublicSubnet2
+            Type: AWS::EC2::Subnet
+            Properties:
+                VpcId: !Ref VPC
+                AvailabilityZone: !Select [ 1, !GetAZ's '' ]
+                CirderBlock: !Ref PrivateSubnet1CIDR
+                MapPublicIpOnLaunch: false
+                Tags: 
+                    -   Key: Name
+                        Value: !Sub ${EnvironmentName} Private Subnet (AZ2)

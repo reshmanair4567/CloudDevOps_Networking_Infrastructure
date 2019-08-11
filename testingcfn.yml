@@ -1,0 +1,9 @@
+Description: 'This template deploys a VPC'
+Resources:
+  myVPC:
+    Type: 'AWS::EC2::VPC'
+    Properties:
+      CidrBlock: 11.0.0.0/16
+      EnableDnsSupport: 'false'
+      EnableDnsHostnames: 'true'
+      InstanceTenancy: dedicated
